@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<cmud>
+  <class name="Research">
+    <alias name="ResearchStart">
+      <value>#CLASS CaptureResearchList 1
+ResearchList = {}
+prac
+#IF (%1 = "bot") {bot start}</value>
+    </alias>
+    <var name="ResearchCap">90</var>
+    <class name="CaptureResearchList" enabled="false">
+      <trigger priority="4750">
+        <pattern>^(*)%s(%d)~%%s(*)%s(%d)~%%s(*)%s(%d)~%$</pattern>
+        <value>#IF (%2 &lt; @ResearchCap) {#ADDITEM ResearchList %trim(%1)}
+#IF (%4 &lt; @ResearchCap) {#ADDITEM ResearchList %trim(%3)}
+#IF (%6 &lt; @ResearchCap) {#ADDITEM ResearchList %trim(%5)}</value>
+      </trigger>
+      <trigger priority="4750">
+        <pattern>^(*)%s(%d)~%%s(*)%s(%d)~%%s$</pattern>
+        <value>#IF (%2 &lt; @ResearchCap) {#ADDITEM ResearchList %trim(%1)}
+#IF (%4 &lt; @ResearchCap) {#ADDITEM ResearchList %trim(%3)}</value>
+      </trigger>
+      <trigger priority="4780">
+        <pattern>To see a shorter practice list, type PRACTICE &lt;class name&gt;.</pattern>
+        <value>ResearchCounter = 1
+#SORT ResearchList
+
+//research %concat("'",%item(ResearchList,@counter),"'")
+research %item(ResearchList,@ResearchCounter)
+
+#CLASS CaptureResearchList 0
+#CLASS ConductResearch 1
+</value>
+      </trigger>
+    </class>
+    <class name="ConductResearch">
+      <trigger priority="4820">
+        <pattern>You search and search but can't find that information.</pattern>
+        <value>research %item(ResearchList,@ResearchCounter)</value>
+      </trigger>
+      <trigger priority="4840">
+        <pattern>You study for hours on end, but fail to gather any knowledge.</pattern>
+        <value>research %item(ResearchList,@ResearchCounter)</value>
+      </trigger>
+      <trigger priority="4870">
+        <pattern>You finish your studies and feel much more skilled.</pattern>
+        <value>research %item(ResearchList,@ResearchCounter)</value>
+      </trigger>
+      <trigger priority="4890">
+        <pattern>You can't learn smuggling skills from a book!</pattern>
+        <value>#ADD ResearchCounter 1
+#IF (@ResearchCounter &gt; %numitems(ResearchList)) {
+#CLASS ConductResearch 0
+#SAY ================================================================================
+#SAY SKILL RESEARCHING COMPLETE. Enter 'ResearchStart' to research again if required.
+#SAY ================================================================================
+#ABORT ALL
+}
+{
+research %item(ResearchList,@ResearchCounter)
+ResearchStatus
+}</value>
+      </trigger>
+      <trigger priority="4910">
+        <pattern>You can't learn any more about that from books!</pattern>
+        <value>#ADD ResearchCounter 1
+#IF (@ResearchCounter &gt; %numitems(ResearchList)) {
+#CLASS ConductResearch 0
+#SAY ================================================================================
+#SAY SKILL RESEARCHING COMPLETE. Enter 'ResearchStart' to research again if required.
+#SAY ================================================================================
+#ABORT ALL
+}
+{
+research %item(ResearchList,@ResearchCounter)
+ResearchStatus
+}</value>
+      </trigger>
+      <trigger priority="4920">
+        <pattern>You can't learn about that in books. Go find a teacher.</pattern>
+        <value>#ADD ResearchCounter 1
+#IF (@ResearchCounter &gt; %numitems(ResearchList)) {
+#CLASS ConductResearch 0
+#SAY ================================================================================
+#SAY SKILL RESEARCHING COMPLETE. Enter 'ResearchStart' to research again if required.
+#SAY ================================================================================
+#ABORT ALL
+}
+{
+research %item(ResearchList,@ResearchCounter)
+ResearchStatus
+}</value>
+      </trigger>
+      <trigger priority="5000">
+        <pattern>You can't learn more about that from books.</pattern>
+        <value>#ADD ResearchCounter 1
+#IF (@ResearchCounter &gt; %numitems(ResearchList)) {
+#CLASS ConductResearch 0
+#SAY ================================================================================
+#SAY SKILL RESEARCHING COMPLETE. Enter 'ResearchStart' to research again if required.
+#SAY ================================================================================
+#ABORT ALL
+}
+{
+research %item(ResearchList,@ResearchCounter)
+ResearchStatus
+}</value>
+      </trigger>
+      <trigger priority="11340">
+        <pattern>You can't learn bounty hunting skills from a book!</pattern>
+        <value>#ADD ResearchCounter 1
+#IF (@ResearchCounter &gt; %numitems(ResearchList)) {
+#CLASS ConductResearch 0
+#SAY ================================================================================
+#SAY SKILL RESEARCHING COMPLETE. Enter 'ResearchStart' to research again if required.
+#SAY ================================================================================
+#ABORT ALL
+}
+{
+research %item(ResearchList,@ResearchCounter)
+ResearchStatus
+}</value>
+      </trigger>
+      <trigger priority="11380">
+        <pattern>You may now bot again.</pattern>
+        <value>AFK
+ResearchStart bot</value>
+      </trigger>
+    </class>
+    <var name="ResearchList" type="StringList" sorted="1">
+      <value>advanced electronics|aid|beg|call|chemistry|climb|construction|data|destruction|diagnose|dig|dock|doctor|drive|duplicate|edibles|education|electronics|emergency_refuel|encrypt_file|enhancement|equipment|first aid|fly|forensics|guidance|hack|healwound|hide|inject|large spacecraft|lookup|machines|makecanteen|makecircuit|makeclothing|makecomlink|makecontainer|makeflashlight|makegoggles|makeholster|makemedpac|medical|medium spacecraft|minerals|narcotics|remodulate|research|revive|roll|search|secure|ship maintenance|shipdodge|short|slice|slip|space combat 3|spacecraft|spice refining|steal|study|teach|throw|transportation</value>
+      <json>["advanced electronics","aid","beg","call","chemistry","climb","construction","data","destruction","diagnose","dig","dock","doctor","drive","duplicate","edibles","education","electronics","emergency_refuel","encrypt_file","enhancement","equipment","first aid","fly","forensics","guidance","hack","healwound","hide","inject","large spacecraft","lookup","machines","makecanteen","makecircuit","makeclothing","makecomlink","makecontainer","makeflashlight","makegoggles","makeholster","makemedpac","medical","medium spacecraft","minerals","narcotics","remodulate","research","revive","roll","search","secure","ship maintenance","shipdodge","short","slice","slip","space combat 3","spacecraft","spice refining","steal","study","teach","throw","transportation"]</json>
+    </var>
+    <alias name="ResearchSkip">
+      <value>#ADD ResearchCounter 1
+research %item(ResearchList,@ResearchCounter)</value>
+    </alias>
+    <alias name="ResearchResume">
+      <value>research %item(ResearchList,@ResearchCounter)</value>
+    </alias>
+    <var name="ResearchCounter">1</var>
+    <alias name="ResearchStatus">
+      <value>#SAY Currently researching: %item(ResearchList,@ResearchCounter)
+#SAY Researching skill #@ResearchCounter of %numitems(ResearchList).</value>
+    </alias>
+  </class>
+</cmud>

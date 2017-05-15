@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<blowtorch xmlversion="2">
+  <windows>
+    <window name="mainDisplay" id="6666">
+      <layoutGroup target="normal">
+        <layout orientation="landscape" above="40" alignParentLeft="true" width="fill_parent" height="fill_parent" />
+        <layout orientation="portrait" above="40" alignParentLeft="true" width="fill_parent" height="fill_parent" />
+      </layoutGroup>
+      <options>
+        <option key="font_size">34</option>
+        <option key="line_extra">2</option>
+      </options>
+    </window>
+  </windows>
+  <options>
+    <option key="gmcp_supports">"char 1"</option>
+    <option key="bell_display">false</option>
+  </options>
+  <triggers>
+    <trigger title="log.capture" pattern="^(?!\/)(.*)$" regexp="true" enabled="false">
+      <ack with='/CaptureText = [["$1"]] CaptureText:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$%/]", "%%%0") assert(io.write(CaptureText .. "\n"))' fireWhen="always" />
+    </trigger>
+    <trigger title="log.start" pattern="(E)nter your name:">
+      <ack with="logstart" fireWhen="always" />
+    </trigger>
+    <trigger title="log.end" pattern="Connection terminated by .*" regexp="true">
+      <ack with="logend" fireWhen="always" />
+    </trigger>
+  </triggers>
+  <aliases>
+    <alias pre="^logstart$" post='/dt = os.date("%Y.%m.%d.%H%M") f = assert(io.open("/storage/emulated/0/BlowTorch/LOTJ.log.txt", "a+")) io.output(f) EnableTrigger("log.capture", true) io.write("++++++++++++++++\n\nLOG START!\n" .. dt .. "\n\n++++++++++++++++") Note("\n\nLOGGING ENABLED!\n\n")' enabled="true" />
+    <alias pre="^logend$" post='/EnableTrigger("log.capture", false) dt = os.date("%Y.%m.%d.%H%M") io.write("++++++++++++++++\n\n" .. dt .. "\nLOG END!\n\n++++++++++++++++") Note("\n\nLOGGING DISABLED!\n\n") f.close()' enabled="true" />
+    <alias pre="^h$" post="holster" enabled="true" />
+  </aliases>
+  <timers />
+  <directions>
+    <entry dir="l" cmd="se" />
+    <entry dir="n" cmd="n" />
+    <entry dir="s" cmd="s" />
+    <entry dir="j" cmd="ne" />
+    <entry dir="e" cmd="e" />
+    <entry dir="k" cmd="sw" />
+    <entry dir="h" cmd="nw" />
+    <entry dir="w" cmd="w" />
+  </directions>
+  <plugins>
+    <plugin name="button_window" id="10">
+      <author></author>
+      <windows>
+        <window name="button_window" id="10203" script="buttonwindow">
+          <layoutGroup target="normal">
+            <layout orientation="landscape" above="40" width="fill_parent" height="fill_parent" />
+            <layout orientation="portrait" above="40" width="fill_parent" height="fill_parent" />
+          </layoutGroup>
+          <options>
+            <option key="line_extra">2</option>
+          </options>
+        </window>
+      </windows>
+      <aliases />
+      <triggers />
+      <timers />
+      <options title="Button" summary="Haptic feedback, roundess and other button options.">
+        <boolean key="auto_launch" title="Automatically launch editor" summary="Automatically launch the editor on the long press action.">true</boolean>
+        <boolean key="auto_create" title="Automatically create buttons" summary="Will add new buttons to emty regions that are long pressed.">true</boolean>
+        <integer key="roundess" title="Button roundness" summary="Radius of button corners.">6</integer>
+        <list key="haptic_edit" title="Haptic feedback on editor launch." summary="Perform haptic feedback when the editor is opened.">
+          <value>0</value>
+          <item>Auto. Obey System Setting</item>
+          <item>Always. Override System Setting</item>
+          <item>Off</item>
+        </list>
+        <list key="haptic_press" title="Haptic feedback on press." summary="Perform haptic feedback when pressed.">
+          <value>0</value>
+          <item>Auto. Obey System Setting</item>
+          <item>Always. Override System Setting</item>
+          <item>Off</item>
+        </list>
+        <list key="haptic_flip" title="Haptic feedback on flip." summary="Perform Haptic feedback when flipped (swipe action).">
+          <value>0</value>
+          <item>Auto. Obey System Setting</item>
+          <item>Always. Override System Setting</item>
+          <item>Off</item>
+        </list>
+      </options>
+      <script name="buttonwindow"><![CDATA[
+			
+			require("buttonwindow")
+			--debugPrint("custom loaded file go!")
+		
+  		
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      ]]>
+      </script>
+      <script name="bootstrap"><![CDATA[
+		
+			require("buttonserver")
+		
+		
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      ]]>
+      </script>
+      <buttonsets>
+        <selected>default</selected>
+        <buttons><![CDATA[return { ["default"] = { { ["flipLabel"] = "", ["x"] = 2224, ["label"] = "N", ["y"] = 288, ["command"] = "north", ["flipCommand"] = "open n", ["labelSize"] = "24" }, { ["flipLabel"] = "", ["x"] = 2436, ["label"] = "E", ["y"] = 500, ["command"] = "east", ["flipCommand"] = "open e", ["labelSize"] = "24" }, { ["flipLabel"] = "", ["x"] = 2224, ["label"] = "S", ["y"] = 712, ["command"] = "south", ["flipCommand"] = "open s", ["labelSize"] = "24" }, { ["flipLabel"] = "", ["x"] = 2012, ["label"] = "W", ["y"] = 500, ["command"] = "west", ["flipCommand"] = "open w", ["labelSize"] = "24" }, { ["flipLabel"] = "", ["x"] = 2012, ["label"] = "U", ["y"] = 288, ["command"] = "up", ["flipCommand"] = "open u", ["labelSize"] = "24" }, { ["flipLabel"] = "", ["x"] = 2012, ["label"] = "D", ["y"] = 712, ["command"] = "down", ["flipCommand"] = "open d", ["labelSize"] = "24" }, { ["flipLabel"] = "", ["x"] = 2436, ["label"] = "LOOK", ["y"] = 712, ["command"] = "look", ["flipCommand"] = "", ["labelSize"] = 23 }, { ["flipLabel"] = "", ["x"] = 2436, ["label"] = "SCORE", ["y"] = 288, ["command"] = "score", ["flipCommand"] = "", ["labelSize"] = 23 }, { ["flipLabel"] = "", ["x"] = 2436, ["label"] = "CLEAR", ["y"] = 924, ["command"] = ".clearbuttons", ["flipCommand"] = "", ["labelSize"] = 23 } } }]]>
+        </buttons>
+        <defaults><![CDATA[return { ["default"] = { ["height"] = "48", ["width"] = "48", ["name"] = "default", ["labelSize"] = "23" } }]]>
+        </defaults>
+      </buttonsets>
+    </plugin>
+  </plugins>
+</blowtorch>
